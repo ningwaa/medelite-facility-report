@@ -58,7 +58,7 @@ def generate():
 
     location_input = request.form.get("location", "").strip()
     
-    # Simple logic to find a state abbreviation from input (e.g., "Miami, FL" -> "FL")
+    # Simple logic to find a state abbreviation from input 
     state_code = "US"
     if location_input:
         parts = [p.strip().upper() for p in location_input.replace(",", " ").split()]
@@ -115,4 +115,5 @@ def download_report(filename):
     )
 
 if __name__ == "__main__":
-     app.run(host="0.0.0.0", port=port, debug=False)
+     port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False)
