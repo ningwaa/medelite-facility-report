@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedElite Data Intake System</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Open Sans', sans-serif;
+            background: #f4f7fc;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: white;
+            width: 100%;
+            max-width: 850px;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            margin-bottom: 28px;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e293b;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #e2e8f0; /* Fixed typo from border-b */
+            display: flex;
+            align-items: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            font-size: 14px;
+            color: #334155;
+            background-color: #fff;
+            outline: none;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #2d6cdf;
+            box-shadow: 0 0 0 3px rgba(45, 108, 223, 0.15);
+        }
+
+        textarea {
+            height: 90px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .director-section textarea {
+            height: 120px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            background: #2d6cdf;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+
+        button:hover {
+            background: #1f4fb3;
+        }
+        
+        button:active {
+            background: #173b87;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+
+    <div class="title">MedElite Facility Data Intake System</div>
+
+    <form method="POST" action="/generate">
+
+        <!-- Section 1: CMS CORE DATA -->
+        <div class="section">
+            <div class="section-title">CMS Core Data</div>
+
+            <div class="grid">
+                <div class="field-group">
+                    <label>Facility ID</label>
+                    <input name="facility_id" required placeholder="e.g. FAC-102">
+                </div>
+
+                <div class="field-group">
+                    <label>Name Override (Optional)</label>
+                    <input name="facility_name_override" placeholder="Alternative Facility Name">
+                </div>
+
+                <div class="field-group">
+                    <label>Location</label>
+                    <input name="location" placeholder="City, State">
+                </div>
+
+                <div class="field-group">
+                    <label>EMR System</label>
+                    <select name="emr">
+                        <option>PCC</option>
+                        <option>MatrixCare</option>
+                        <option>Epic</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label>Census Capacity</label>
+                    <input type="number" name="capacity" value="0">
+                </div>
+
+                <div class="field-group">
+                    <label>Current Census</label>
+                    <input type="number" name="census" placeholder="Current count">
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Patient notes -->
+        <div class="section">
+            <div class="section-title">Patient & Coverage Data</div>
+
+            <div class="grid">
+                <div class="field-group">
+                    <label>Type of Patient</label>
+                    <input name="patient_type" placeholder="e.g. Geriatric, Post-Acute">
+                </div>
+
+                <div class="field-group">
+                    <label>Previous MedElite Coverage</label>
+                    <select name="prev_coverage">
+                        <option>Yes</option>
+                        <option>No</option>
+                    </select>
+                </div>
+
+                <div class="field-group full-width">
+                    <label>Provider Performance Notes</label>
+                    <textarea name="provider_performance" placeholder="Input relevant performance metrics or remarks..."></textarea>
+                </div>
+
+                <div class="field-group full-width">
+                    <label>Medical Coverage</label>
+                    <input name="medical_coverage" placeholder="e.g. Commercial, Medicare, Medicaid">
+                </div>
+            </div>
+        </div>
+
+       
+        <div class="section director-section">
+            <div class="section-title">Director Notes</div>
+            <div class="field-group">
+                <textarea name="notes" placeholder="Enter high-level administrative observations or instructions here..."></textarea>
+            </div>
+        </div>
+
+        <button type="submit">Generate Full Analytics Report</button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

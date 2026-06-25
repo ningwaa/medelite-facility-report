@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INFINITE — Managed by MEDELITE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Open Sans', sans-serif; background: #f4f7fc; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* Corporate Branding Header Styles Block */
+        .header { 
+            background: #1e40af; 
+            color: white; 
+            padding: 22px 24px; 
+            text-align: center; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+        }
+        .header .brand-line {
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .header .snapshot-line {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .container { flex: 1; display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px; }
+        .card { background: white; width: 100%; max-width: 750px; padding: 35px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #e2e8f0; }
+        
+        .title { 
+            font-size: 26px; 
+            font-weight: 700; 
+            color: #1e40af; 
+            margin-bottom: 25px; 
+            border-bottom: 2px solid #f1f5f9; 
+            padding-bottom: 12px; 
+        }
+        
+        .section-heading { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #1e40af; margin: 25px 0 10px 0; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
+        .box { background: #f8fafc; padding: 12px 14px; border-radius: 8px; border: 1px solid #f1f5f9; font-size: 13px; color: #475569; display: flex; justify-content: space-between; align-items: center; }
+        .box b { color: #0f172a; font-weight: 600; }
+        .full-box { grid-column: span 2; display: block; line-height: 1.5; }
+        .risk { padding: 16px; border-radius: 8px; font-weight: 700; font-size: 15px; text-align: center; margin: 25px 0; border: 1px solid transparent; }
+        .low { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+        .medium { background: #fffbeb; color: #92400e; border-color: #fde68a; }
+        .high { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
+        .actions-group { display: flex; flex-direction: column; gap: 12px; }
+        .btn { display: flex; justify-content: center; align-items: center; width: 100%; padding: 14px; color: white; text-decoration: none; border-radius: 8px; font-size: 15px; font-weight: 600; transition: background-color 0.15s ease; text-align: center; }
+        .btn-primary { background: #2d6cdf; }
+        .btn-primary:hover { background: #1f4fb3; }
+        .btn-secondary { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+        .btn-secondary:hover { background: #e2e8f0; color: #1e293b; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="brand-line">INFINITE — Managed by MEDELITE</div>
+    <div class="snapshot-line">FACILITY ASSESSMENT SNAPSHOT ({{ data.state_code }})</div>
+</div>
+
+<div class="container">
+    <div class="card">
+        <div class="title">{{ facility.name }}</div>
+
+        <div class="section-heading">CMS Data Metrics</div>
+        <div class="grid">
+            <div class="box"><span><b>Facility ID:</b></span> <span>{{ facility_id }}</span></div>
+            <div class="box"><span><b>Star Rating:</b></span> <span>{{ facility.star_rating }} / 5</span></div>
+            <div class="box"><span><b>Hospitalizations:</b></span> <span>{{ facility.hospitalizations }}</span></div>
+            <div class="box"><span><b>Staffing Score:</b></span> <span>{{ facility.staffing_score }}</span></div>
+            <div class="box"><span><b>Inspection Score:</b></span> <span>{{ facility.inspection_score }}</span></div>
+            <div class="box"><span><b>Location Address:</b></span> <span>{{ data.location or 'Default Base Area' }}</span></div>
+        </div>
+
+        <div class="section-heading">Operational Intake Criteria</div>
+        <div class="grid">
+            <div class="box"><span><b>EMR System:</b></span> <span>{{ data.emr }}</span></div>
+            <div class="box"><span><b>Census Capacity:</b></span> <span>{{ data.capacity or '0' }} Beds</span></div>
+            <div class="box"><span><b>Current Active Census:</b></span> <span>{{ data.census or '0' }}</span></div>
+            <div class="box"><span><b>Patient Classification:</b></span> <span>{{ data.patient_type or 'Not Listed' }}</span></div>
+            <div class="box"><span><b>Prior MedElite Coverage:</b></span> <span>{{ data.prev_coverage }}</span></div>
+            <div class="box"><span><b>Medical Coverage:</b></span> <span>{{ data.medical_coverage or 'Not Specified' }}</span></div>
+            
+            {% if data.provider_performance %}
+            <div class="box full-box">
+                <b>Provider Performance Remarks:</b>
+                <div style="color:#64748b; margin-top:4px;">{{ data.provider_performance }}</div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="risk {% if risk_level == 'Low' %}low{% elif risk_level == 'Medium' %}medium{% else %}high{% endif %}">
+            Risk Level Evaluation: {{ risk_level }} (Score: {{ risk_score }})
+        </div>
+
+        <div class="actions-group">
+            <a class="btn btn-primary" href="/reports/{{ pdf_path }}">Download PDF Report</a>
+            <a href="/" class="btn btn-secondary">Generate Another Report</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
